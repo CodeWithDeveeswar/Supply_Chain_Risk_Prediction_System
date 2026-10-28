@@ -5,7 +5,7 @@
 [![Machine Learning](https://img.shields.io/badge/ML-Random_Forest-orange.svg)](https://scikit-learn.org/)
 [![Database](https://img.shields.io/badge/Database-SQLite-blue.svg)](https://www.sqlite.org/)
 
-A web application that predicts supply chain risk levels using the **Random Forest machine learning algorithm**. It analyzes key factors such as delivery delay, traffic, weather, inventory, order value, and port delay. It allows administrators to enter data manually or upload CSV files to generate predictions, view interactive dashboards, charts, and prediction history, and export reports to Excel and image formats. The application is developed using Python, Flask, HTML, CSS, JavaScript, Bootstrap, SQLite, Pandas, Scikit-learn, and Chart.js.
+A web application that predicts supply chain risk levels using the Random Forest machine learning algorithm. It analyzes key factors such as delivery delay, traffic, weather, inventory, order value, and port delay. It allows administrators to enter data manually or upload CSV files to generate predictions, view interactive dashboards, charts, and prediction history, and export reports to Excel and image formats. The application is developed using Python, Flask, HTML, CSS, JavaScript, Bootstrap, SQLite, Pandas, Scikit-learn, and Chart.js.
 
 ## 📑 Table of Contents
 

@@ -139,8 +139,6 @@ Supply_Chain_Risk_Prediction_System/
     └── predictor.py
 ```
 
-_Note: This structure reflects the project layout described in the documentation. Update it if your actual repository contains different files or folders._
-
 - `app.py` — Flask application entry point.
 - `model/train_model.py` — Trains the machine learning model.
 - `model/risk_model.pkl` — Saved model used for predictions.

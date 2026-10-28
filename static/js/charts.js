@@ -1,3 +1,16 @@
+// Responsive defaults: keep chart text readable on phones and desktop.
+// Individual chart configurations below can still override these defaults.
+if (window.Chart) {
+    Chart.defaults.responsive = true;
+    Chart.defaults.maintainAspectRatio = false;
+    Chart.defaults.font.family = "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    Chart.defaults.font.size = window.matchMedia("(max-width: 760px)").matches ? 11 : 12;
+    Chart.defaults.color = "#cbd5e1";
+    Chart.defaults.plugins.legend.labels.boxWidth = 12;
+    Chart.defaults.plugins.legend.labels.boxHeight = 10;
+    Chart.defaults.plugins.legend.labels.padding = window.matchMedia("(max-width: 760px)").matches ? 10 : 14;
+}
+
 const ctx = document.getElementById('regionChart').getContext('2d');
 
 new Chart(ctx, {

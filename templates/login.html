@@ -1,61 +1,33 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Supply Chain Risk Prediction System</title>
-
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/dark-theme.css') }}"
-    />
-  </head>
-
-  <body class="login-body">
-    <div class="login-wrapper">
-      <!-- HEADER (NEW) -->
-      <div class="login-header">
-        <h1>Supply Chain Risk Prediction System</h1>
-        <p>Smart Risk Detection & Analytics Platform</p>
-      </div>
-
-      <!-- FORM -->
-      <div class="login-container">
-        <form method="POST" class="login-form">
-          <h2>Admin Login</h2>
-
-          {% with messages = get_flashed_messages(with_categories=true) %} {% if
-          messages %} {% for category, message in messages %}
-          <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %} {% endif %} {% endwith %}
-
-          <div class="input-group">
-            <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Enter username"
-              required
-            />
-          </div>
-
-          <div class="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              required
-            />
-          </div>
-
-          <button type="submit" class="login-btn">Login</button>
-        </form>
-      </div>
-    </div>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in | Supply Chain Risk Prediction System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-theme.css') }}">
+  <style>
+    .login-form h2{margin-bottom:20px}
+    @media(max-width:480px){.login-wrapper{padding:20px 14px}.login-header h1{font-size:1.55rem}.login-container{width:100%;max-width:420px;padding:24px 20px}}
+  </style>
+</head>
+<body class="login-body">
+  <div class="login-wrapper">
+    <header class="login-header">
+      <h1>Supply Chain Risk Prediction System</h1>
+      <p>Smart Risk Detection &amp; Analytics Platform</p>
+    </header>
+    <section class="login-container">
+      <form method="POST" class="login-form">
+        <h2>Administrator Login</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+        {% endwith %}
+        <div class="input-group"><label for="username">Username</label><input id="username" type="text" name="username" autocomplete="username" placeholder="Enter username" required></div>
+        <div class="input-group"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" placeholder="Enter password" required></div>
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+    </section>
+  </div>
+</body>
 </html>

@@ -1,17 +1,13 @@
-# Python cache
 __pycache__/
 *.py[cod]
 
-# VS Code
 .vscode/
 
-# Virtual environment
 venv/
 .venv/
 env/
 
-# Training Reports
 model/reports/
 
-# Environment variables (never commit secrets)
 .env
+!.env.example

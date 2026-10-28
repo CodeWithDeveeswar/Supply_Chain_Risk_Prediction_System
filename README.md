@@ -33,8 +33,8 @@ A web application that predicts supply chain risk levels using the **Random Fore
 | 📝 Manual Data Entry      | Enter supply chain information manually                                           |
 | 📂 CSV Upload             | Upload supply chain data from CSV files                                           |
 | 📊 Interactive Dashboard  | Visualize risk distribution and supply chain insights                             |
-| 📜 Prediction History     | View stored prediction records                                                    |
-| 🔍 Search and Filter      | Search records and filter by risk level                                           |
+| 📜 Prediction History     | View records with responsive controls and pagination                              |
+| 🔍 Search and Filter      | Search records and filter by risk level with 20 records per page                  |
 | 📥 Excel Export           | Export prediction records to Excel                                                |
 | 🖼️ Dashboard Image Export | Save a dashboard snapshot as an image                                             |
 | 💾 SQLite Storage         | Store prediction records in a local database                                      |
@@ -44,9 +44,9 @@ A web application that predicts supply chain risk levels using the **Random Fore
 
 ## 🔐 Login Credentials
 
-| Username | Password   |
-| -------- | ---------- |
-| `admin`  | `admin123` |
+| Setting           | Description                                                              |
+| ----------------- | ------------------------------------------------------------------------ |
+| Admin credentials | Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD` in the local `.env` file |
 
 ---
 
@@ -168,7 +168,7 @@ cd Supply_Chain_Risk_Prediction_System
 ### 3. Create a virtual environment
 
 ```bash
-python -m venv venv
+py -3.10 -m venv venv
 ```
 
 ### 4. Activate the virtual environment
@@ -176,7 +176,7 @@ python -m venv venv
 **Windows:**
 
 ```bash
-venv\Scripts\activate
+.\venv\Scripts\Activate.ps1
 ```
 
 **macOS / Linux:**
@@ -242,7 +242,7 @@ Visit:
 
 **http://127.0.0.1:5000**
 
-Log in using the credentials configured in your application.
+Log in using the administrator credentials configured in your local `.env` file (`ADMIN_USERNAME` and `ADMIN_PASSWORD`).
 
 ---
 
@@ -280,9 +280,9 @@ These metrics describe that particular evaluation run. Performance can vary with
 
 ## 🚀 Future Enhancements
 
-- [ ] Multi-user authentication
-- [ ] Role-based access control
-- [ ] Mobile-responsive design
+- [ ] Stronger administrator authentication
+- [ ] Administrator session and security improvements
+- [ ] Further mobile UI and accessibility improvements
 - [ ] Cloud database integration
 - [ ] Live supply chain data integration
 - [ ] REST API support

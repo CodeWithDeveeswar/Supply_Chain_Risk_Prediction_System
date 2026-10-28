@@ -1,135 +1,86 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="history-container">
-
-    <h2>Prediction History</h2>
-
-    <!-- CONTROLS -->
-    <div class="history-controls">
-
-        <!-- SEARCH -->
-        <input type="text" id="searchInput" placeholder="Search..." onkeyup="applyFilters()">
-
-        <!-- FILTER -->
-        <select id="filterRisk" onchange="applyFilters()">
-            <option value="">All Risk Levels</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-        </select>
-
-        <!-- EXPORT -->
-        <button onclick="exportToExcel()" class="export-btn">
-            Export Excel
-        </button>
-
-        <!-- DELETE -->
-        <button onclick="deleteAll()" class="delete-btn danger">
-            Delete All
-        </button>
+    <div class="history-heading">
+        <div><h2>Prediction History</h2><p class="history-subtitle">Search, filter, and manage saved predictions.</p></div>
+        <div class="record-count">{{ total_records }} total records</div>
     </div>
 
-    <!-- TABLE -->
-    <div class="table-container">
+    <form class="history-controls" method="get" action="{{ url_for('history') }}">
+        <label class="sr-only" for="searchInput">Search prediction history</label>
+        <input type="search" id="searchInput" name="search" value="{{ search }}" placeholder="Search records...">
+        <div class="history-filter-row">
+            <label class="sr-only" for="filterRisk">Filter by risk</label>
+            <select id="filterRisk" name="risk">
+                <option value="" {% if not risk_filter %}selected{% endif %}>All Risk Levels</option>
+                <option value="High" {% if risk_filter == 'High' %}selected{% endif %}>High Risk</option>
+                <option value="Medium" {% if risk_filter == 'Medium' %}selected{% endif %}>Medium Risk</option>
+                <option value="Low" {% if risk_filter == 'Low' %}selected{% endif %}>Low Risk</option>
+            </select>
+            <button type="submit" class="filter-btn"><i class="fa-solid fa-magnifying-glass"></i> Apply filters</button>
+            {% if search or risk_filter %}<a class="reset-btn" href="{{ url_for('history') }}">Reset</a>{% endif %}
+        </div>
+        <div class="history-actions">
+            <button type="button" onclick="exportToExcel()" class="export-btn"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+            <button type="button" onclick="deleteAll()" class="delete-btn danger"><i class="fa-solid fa-trash"></i> Delete All</button>
+        </div>
+    </form>
+
+    <div class="records-summary">Showing <strong>{{ start_record }}–{{ end_record }}</strong> of <strong>{{ total_records }}</strong> records <span>· 20 records per page</span></div>
+
+    <!-- Desktop/tablet table -->
+    <div class="table-container desktop-history-table">
         <table id="historyTable">
-
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Supplier</th>
-                    <th>Region</th>
-                    <th>Transport</th>
-                    <th>Delay</th>
-                    <th>Weather</th>
-                    <th>Inventory</th>
-                    <th>Order Value</th>
-                    <th>Risk</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
+            <thead><tr><th>ID</th><th>Date</th><th>Supplier</th><th>Region</th><th>Transport</th><th>Delay</th><th>Weather</th><th>Inventory</th><th>Order Value</th><th>Risk</th><th>Action</th></tr></thead>
             <tbody>
-
-                {% for row in data %}
+            {% for row in data %}
                 <tr>
-
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.date }}</td>
-                    <td>{{ row.supplier }}</td>
-                    <td>
-                        {% if row.region == 0 %} Asia
-                        {% elif row.region == 1 %} Europe
-                        {% elif row.region == 2 %} North America
-                        {% elif row.region == 3 %} South America
-                        {% elif row.region == 4 %} Africa
-                        {% else %} Unknown
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        {% if row.transport == 0 %} 🚚 Truck
-                        {% elif row.transport == 1 %} 🚆 Rail
-                        {% elif row.transport == 2 %} 🚢 Ship
-                        {% elif row.transport == 3 %} ✈ Air
-                        {% else %} Unknown
-                        {% endif %}
-                    </td>
-
-                    <td>{{ row.delay }}</td>
-
-                    <td>
-                        {% if row.weather == 0 %}
-                        ☀️ Clear
-                        {% elif row.weather == 1 %}
-                        🌧 Rain
-                        {% elif row.weather == 2 %}
-                        ⛈ Storm
-                        {% elif row.weather == 3 %}
-                        ❄️ Snow
-                        {% elif row.weather == 4 %}
-                        🌫 Fog
-                        {% else %}
-                        🌤 Unknown
-                        {% endif %}
-                    </td>
-
-                    <td>{{ row.inventory }}</td>
-                    <td>${{ "{:,.0f}".format(row.order_value) }}</td>
-
-                    <td>
-                        <span class="risk-badge
-                            {% if row.risk_level == 'High' %} risk-high
-                            {% elif row.risk_level == 'Medium' %} risk-medium
-                            {% else %} risk-low
-                            {% endif %}
-                        ">
-                            {{ row.risk_level }}
-                        </span>
-                    </td>
-
-                    <td>
-                        <button onclick="deleteSingle({{ row.id }})" class="delete-btn icon">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-
+                    <td data-label="ID">{{ row.id }}</td><td data-label="Date">{{ row.date }}</td><td data-label="Supplier">{{ row.supplier }}</td>
+                    <td data-label="Region">{% if row.region == 0 %}Asia{% elif row.region == 1 %}Europe{% elif row.region == 2 %}North America{% elif row.region == 3 %}South America{% elif row.region == 4 %}Africa{% else %}Unknown{% endif %}</td>
+                    <td data-label="Transport">{% if row.transport == 0 %}🚚 Truck{% elif row.transport == 1 %}🚆 Rail{% elif row.transport == 2 %}🚢 Ship{% elif row.transport == 3 %}✈ Air{% else %}Unknown{% endif %}</td>
+                    <td data-label="Delay">{{ row.delay }}</td>
+                    <td data-label="Weather">{% if row.weather == 0 %}☀️ Clear{% elif row.weather == 1 %}🌧 Rain{% elif row.weather == 2 %}⛈ Storm{% elif row.weather == 3 %}❄️ Snow{% elif row.weather == 4 %}🌫 Fog{% else %}🌤 Unknown{% endif %}</td>
+                    <td data-label="Inventory">{{ row.inventory }}</td><td data-label="Order Value">${{ "{:,.0f}".format(row.order_value or 0) }}</td>
+                    <td data-label="Risk"><span class="risk-badge {% if row.risk_level == 'High' %}risk-high{% elif row.risk_level == 'Medium' %}risk-medium{% else %}risk-low{% endif %}">{{ row.risk_level }}</span></td>
+                    <td data-label="Action"><button type="button" onclick="deleteSingle({{ row.id }})" class="delete-btn icon" aria-label="Delete record {{ row.id }}"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
-                {% else %}
-                <tr>
-                    <td colspan="9" style="text-align:center; padding:20px;">
-                        No prediction history found
-                    </td>
-                </tr>
-                {% endfor %}
-
+            {% else %}<tr><td colspan="11" class="empty-cell">No prediction history found for these filters.</td></tr>{% endfor %}
             </tbody>
-
         </table>
     </div>
 
-</div>
+    <!-- Mobile card list -->
+    <div class="mobile-history-cards">
+        {% for row in data %}
+        <article class="history-record-card">
+            <div class="history-card-top"><div><span class="history-record-id">Record #{{ row.id }}</span><h3>{{ row.supplier or 'Unknown supplier' }}</h3></div><span class="risk-badge {% if row.risk_level == 'High' %}risk-high{% elif row.risk_level == 'Medium' %}risk-medium{% else %}risk-low{% endif %}">{{ row.risk_level }}</span></div>
+            <p class="history-card-date"><i class="fa-regular fa-calendar"></i> {{ row.date }}</p>
+            <div class="history-card-grid">
+                <div><span>Region</span><strong>{% if row.region == 0 %}Asia{% elif row.region == 1 %}Europe{% elif row.region == 2 %}North America{% elif row.region == 3 %}South America{% elif row.region == 4 %}Africa{% else %}Unknown{% endif %}</strong></div>
+                <div><span>Transport</span><strong>{% if row.transport == 0 %}Truck{% elif row.transport == 1 %}Rail{% elif row.transport == 2 %}Ship{% elif row.transport == 3 %}Air{% else %}Unknown{% endif %}</strong></div>
+                <div><span>Delay</span><strong>{{ row.delay }} days</strong></div>
+                <div><span>Weather</span><strong>{% if row.weather == 0 %}Clear{% elif row.weather == 1 %}Rain{% elif row.weather == 2 %}Storm{% elif row.weather == 3 %}Snow{% elif row.weather == 4 %}Fog{% else %}Unknown{% endif %}</strong></div>
+                <div><span>Inventory</span><strong>{{ row.inventory }}</strong></div>
+                <div><span>Order Value</span><strong>${{ "{:,.0f}".format(row.order_value or 0) }}</strong></div>
+            </div>
+            <div class="history-card-actions"><button type="button" onclick="deleteSingle({{ row.id }})" class="delete-btn"><i class="fa-solid fa-trash"></i> Delete record</button></div>
+        </article>
+        {% else %}<div class="history-empty-card">No prediction history found for these filters.</div>{% endfor %}
+    </div>
 
+    {% if total_records > 0 %}
+    <nav class="pagination" aria-label="Prediction history pages">
+        {% set prev_page = page - 1 %}{% set next_page = page + 1 %}
+        <a class="page-link page-prev {% if page <= 1 %}disabled{% endif %}" href="{{ url_for('history', page=prev_page, search=search, risk=risk_filter) if page > 1 else '#' }}" {% if page <= 1 %}aria-disabled="true" tabindex="-1"{% endif %}><i class="fa-solid fa-chevron-left"></i><span>Previous</span></a>
+        <div class="page-numbers">
+            {% set first_page = [1, page - 2]|max %}{% set last_page = [total_pages, page + 2]|min %}
+            {% if first_page > 1 %}<a class="page-link" href="{{ url_for('history', page=1, search=search, risk=risk_filter) }}">1</a>{% if first_page > 2 %}<span class="page-ellipsis">…</span>{% endif %}{% endif %}
+            {% for p in range(first_page, last_page + 1) %}<a class="page-link {% if p == page %}current{% endif %}" href="{{ url_for('history', page=p, search=search, risk=risk_filter) }}" {% if p == page %}aria-current="page"{% endif %}>{{ p }}</a>{% endfor %}
+            {% if last_page < total_pages %}{% if last_page < total_pages - 1 %}<span class="page-ellipsis">…</span>{% endif %}<a class="page-link" href="{{ url_for('history', page=total_pages, search=search, risk=risk_filter) }}">{{ total_pages }}</a>{% endif %}
+        </div>
+        <a class="page-link page-next {% if page >= total_pages %}disabled{% endif %}" href="{{ url_for('history', page=next_page, search=search, risk=risk_filter) if page < total_pages else '#' }}" {% if page >= total_pages %}aria-disabled="true" tabindex="-1"{% endif %}><span>Next</span><i class="fa-solid fa-chevron-right"></i></a>
+    </nav>
+    {% endif %}
+</div>
 {% endblock %}

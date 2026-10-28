@@ -5,12 +5,18 @@ from datetime import datetime
 import sqlite3
 import os
 
-def export_excel(db_path):
+def export_excel(db_path, user_id):
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
+    cursor.execute("""
+        SELECT id, date, supplier, region, transport, delay, weather, demand,
+               inventory, traffic, port_delay, order_value, fuel_cost, risk
+        FROM predictions
+        WHERE user_id = ?
+        ORDER BY id DESC
+    """, (user_id,))
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
 

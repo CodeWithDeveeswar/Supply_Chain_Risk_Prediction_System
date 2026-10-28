@@ -295,7 +295,9 @@ These metrics describe that particular evaluation run. Performance can vary with
 
 ## 👨‍💻 Author
 
-**DEVEESWAR K** ([CodeWithDeveeswar](https://github.com/CodeWithDeveeswar))
+**DEVEESWAR K**
+
+GitHub: [CodeWithDeveeswar](https://github.com/CodeWithDeveeswar)
 
 ---
 

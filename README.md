@@ -299,8 +299,6 @@ These metrics describe that particular evaluation run. Performance can vary with
 
 GitHub: [CodeWithDeveeswar](https://github.com/CodeWithDeveeswar)
 
-**Project Repository:** [Supply Chain Risk Prediction System](https://github.com/CodeWithDeveeswar/Supply_Chain_Risk_Prediction_System)
-
 ---
 
 ## 📄 License
